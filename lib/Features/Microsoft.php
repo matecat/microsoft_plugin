@@ -21,4 +21,8 @@ class Microsoft extends BaseFeature {
 
 
     }
+
+    public function beginDoAction(){
+        //sleep(1);
+    }
 }
