@@ -11,6 +11,7 @@ namespace Features;
 use Features\Microsoft\Utils\Email\ConfirmedQuotationEmail;
 use Features\Microsoft\Utils\Email\ErrorQuotationEmail;
 use Klein\Klein;
+use Features;
 use \Features\Outsource\Traits\Translated;
 
 class Microsoft extends BaseFeature {
@@ -19,8 +20,14 @@ class Microsoft extends BaseFeature {
 
     const FEATURE_CODE = "microsoft";
 
-    public static function loadRoutes( Klein $klein ) {
+    public static $dependencies = [
+            Features::PROJECT_COMPLETION,
+            Features::TRANSLATION_VERSIONS,
+            Features::REVIEW_EXTENDED
+    ];
 
+    public static function loadRoutes( Klein $klein ) {
+        route( '/job/[:id_job]/[:password]/sign_off', 'GET', 'Features\Microsoft\Controller\SignOffController', 'signedOffCallback' );
     }
 
 
