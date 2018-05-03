@@ -12,7 +12,7 @@ use Features\Microsoft\Utils\Email\ConfirmedQuotationEmail;
 use Features\Microsoft\Utils\Email\ErrorQuotationEmail;
 use Klein\Klein;
 use Features;
-use \Features\Outsource\Traits\TranslatedTrait;
+use \Features\Outsource\Traits\Translated as TranslatedTrait;
 
 class Microsoft extends BaseFeature {
 
