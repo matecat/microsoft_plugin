@@ -15,20 +15,19 @@ use LQA\ChunkReviewDao;
 
 class ProjectUrlsDecorator extends UrlDecorator {
 
-    protected function generateChunkUrls( $record){
+    public function reviseUrl( $record ) {
 
         $reviewChunk = ChunkReviewDao::findOneChunkReviewByIdJobAndPassword(
                 $record[ 'jid' ], $record[ 'jpassword' ]
         );
 
-        if ( !array_key_exists( $record['jpassword'], $this->chunks ) ) {
-            $this->chunks[ $record['jpassword'] ] = 1 ;
-            $this->jobs[ $record['jid'] ][ 'chunks' ][] = array(
-                    'password'      => $record['jpassword'],
-                    'translate_url' => $this->translateUrl( $record ),
-                    'revise_url'    => $this->reviseUrl( $record ),
-            );
-        }
+        return \Routes::revise(
+                $record[ 'name' ],
+                $record[ 'jid' ],
+                ( !empty( $reviewChunk ) ? $reviewChunk->review_password : $record[ 'jpassword' ] ),
+                $record[ 'source' ],
+                $record[ 'target' ]
+        );
 
     }
 
