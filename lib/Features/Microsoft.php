@@ -23,11 +23,12 @@ class Microsoft extends BaseFeature {
     public static $dependencies = [
             Features::PROJECT_COMPLETION,
             Features::TRANSLATION_VERSIONS,
-            Features::REVIEW_EXTENDED
+            Features::REVIEW_EXTENDED,
+            Features::QACHECK_GLOSSARY
     ];
 
     public static function loadRoutes( Klein $klein ) {
-        route( '/job/[:id_job]/[:password]/sign_off', 'GET', 'Features\Microsoft\Controller\SignOffController', 'signedOffCallback' );
+        //route( '/job/[:id_job]/[:password]/sign_off', 'GET', 'Features\Microsoft\Controller\SignOffController', 'signedOffCallback' );
     }
 
 
