@@ -8,8 +8,10 @@
 
 namespace Features;
 
+use API\V2\Json\ProjectUrls;
 use Features\Microsoft\Utils\Email\ConfirmedQuotationEmail;
 use Features\Microsoft\Utils\Email\ErrorQuotationEmail;
+use Features\Microsoft\View\API\JSON\ProjectUrlsDecorator;
 use Klein\Klein;
 use Features;
 use \Features\Outsource\Traits\Translated as TranslatedTrait;
@@ -31,6 +33,11 @@ class Microsoft extends BaseFeature {
         //route( '/job/[:id_job]/[:password]/sign_off', 'GET', 'Features\Microsoft\Controller\SignOffController', 'signedOffCallback' );
     }
 
+    public static function projectUrls( ProjectUrls $formatted ) {
+        $projectUrlsDecorator = new ProjectUrlsDecorator( $formatted->getData());
+
+        return $projectUrlsDecorator;
+    }
 
     public function afterTMAnalysisCloseProject( $project_id ) {
         $this->setSuccessMailSender( new ConfirmedQuotationEmail( self::getPluginBasePath() . '/Features/Microsoft/View/Emails/confirmed_quotation.html' ) );
