@@ -11,7 +11,7 @@ namespace Features;
 use API\V2\Json\ProjectUrls;
 use Features\Microsoft\Utils\Email\ConfirmedQuotationEmail;
 use Features\Microsoft\Utils\Email\ErrorQuotationEmail;
-use Features\Microsoft\View\API\JSON\ProjectUrlsDecorator;
+use Features\Microsoft\View\API\JSON\MicrosoftUrlsDecorator;
 use Klein\Klein;
 use Features;
 use \Features\Outsource\Traits\Translated as TranslatedTrait;
@@ -34,7 +34,7 @@ class Microsoft extends BaseFeature {
     }
 
     public static function projectUrls( ProjectUrls $formatted ) {
-        $projectUrlsDecorator = new ProjectUrlsDecorator( $formatted->getData());
+        $projectUrlsDecorator = new MicrosoftUrlsDecorator( $formatted->getData());
 
         return $projectUrlsDecorator;
     }

@@ -13,7 +13,7 @@ use \Features\ReviewExtended\View\API\JSON\ProjectUrlsDecorator as UrlDecorator;
 use LQA\ChunkReviewDao;
 
 
-class ProjectUrlsDecorator extends UrlDecorator {
+class MicrosoftUrlsDecorator extends UrlDecorator {
 
     public function reviseUrl( $record ) {
 
