@@ -12,11 +12,11 @@ use Features\Microsoft\Utils\Email\ConfirmedQuotationEmail;
 use Features\Microsoft\Utils\Email\ErrorQuotationEmail;
 use Klein\Klein;
 use Features;
-use \Features\Outsource\Traits\Translated;
+use \Features\Outsource\Traits\TranslatedTrait;
 
 class Microsoft extends BaseFeature {
 
-    use Translated;
+    use TranslatedTrait;
 
     const FEATURE_CODE = "microsoft";
 
