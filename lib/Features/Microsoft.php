@@ -23,7 +23,7 @@ class Microsoft extends BaseFeature {
     public static $dependencies = [
             Features::PROJECT_COMPLETION,
             Features::TRANSLATION_VERSIONS,
-            Features::REVIEW_EXTENDED,
+            Features::REVIEW_IMPROVED,
             Features::QACHECK_GLOSSARY
     ];
 
