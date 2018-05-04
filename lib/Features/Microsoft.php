@@ -44,4 +44,16 @@ class Microsoft extends BaseFeature {
         $this->setFailureMailSender( new ErrorQuotationEmail( self::getPluginBasePath() . '/Features/Microsoft/View/Emails/error_quotation.html' ) );
         $this->requestQuote( $project_id );
     }
+
+    /**
+     * Send the alt-trans to MyMemory
+     *
+     * @param $boolean
+     *
+     * @return bool
+     */
+    public function doNotManageAlternativeTranslations( $boolean ){
+        return false;
+    }
+
 }
