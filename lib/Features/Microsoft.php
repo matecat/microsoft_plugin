@@ -56,4 +56,15 @@ class Microsoft extends BaseFeature {
         return false;
     }
 
+    /**
+     * Entry point for project data validation for this feature.
+     *
+     * @param $projectStructure
+     */
+    public function validateProjectCreation( $projectStructure )  {
+        //override Revise Improved qa Model
+        $qa_mode_file = realpath( self::getPluginBasePath() . "/../qa_model.json" );
+        ReviewImproved::loadAndValidateModelFromJsonFile( $projectStructure, $qa_mode_file );
+    }
+
 }
