@@ -39,6 +39,13 @@ class Microsoft extends BaseFeature {
         return $projectUrlsDecorator;
     }
 
+    public function filterProjectCompletionDisplayButton($displayButton, Features\ProjectCompletion\Decorator\CatDecorator $decorator) {
+        if ( $decorator->getController()->isRevision() ) {
+            return false;
+        }
+        return $displayButton ;
+    }
+
     public function afterTMAnalysisCloseProject( $project_id ) {
         $this->setSuccessMailSender( new ConfirmedQuotationEmail( self::getPluginBasePath() . '/Features/Microsoft/View/Emails/confirmed_quotation.html' ) );
         $this->setFailureMailSender( new ErrorQuotationEmail( self::getPluginBasePath() . '/Features/Microsoft/View/Emails/error_quotation.html' ) );
