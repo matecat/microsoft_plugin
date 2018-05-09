@@ -5,7 +5,16 @@
     let filte_size = '50';
     let filter_type = 'regular_intervals';
     $.extend(UI, {
-
+        showFixWarningsModal: function (  ) {
+            APP.confirm({
+                name: 'markJobAsComplete', // <-- this is the name of the function that gets invoked?
+                okTxt: 'Fix errors',
+                callback: 'goToFirstError',
+                onCancel: 'markJobAsComplete',
+                cancelTxt: 'Mark as complete',
+                msg: 'Unresolved glossary and/or tag issues are preventing you from completing your translation. <br>Please fix the issues.'
+            });
+        }
     });
 
     $.extend(SF, {
