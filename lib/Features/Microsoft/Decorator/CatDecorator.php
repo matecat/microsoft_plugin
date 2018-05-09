@@ -18,6 +18,8 @@ class CatDecorator extends AbstractDecorator {
 
         $this->template->segment_filter_size  = '50' ;
         $this->template->segment_filter_type  = 'regular_intervals' ;
+        $this->template->footer_show_translate_link = false;
+
     }
 
 }
