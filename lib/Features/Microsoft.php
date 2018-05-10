@@ -74,4 +74,8 @@ class Microsoft extends BaseFeature {
         ReviewImproved::loadAndValidateModelFromJsonFile( $projectStructure, $qa_mode_file );
     }
 
+    public function glossaryMatchPattern($default_pattern) {
+        return $default_pattern."i"; // regex with case insensitive only for microsoft
+    }
+
 }
