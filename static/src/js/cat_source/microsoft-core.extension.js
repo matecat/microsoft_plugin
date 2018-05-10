@@ -32,6 +32,15 @@
 
     });
 
+    $( "body" ).on( 'click', '.modal[data-name=markJobAsComplete] .x-popup', function ( e ) {
+        e.preventDefault();
+        e.stopPropagation();
+        var el = $( this ).parents( '.modal' ).find( '.btn-cancel' );
+        el.removeAttr('data-callback');
+
+        return false;
+    });
+
     function overrideSegmentsFilter( SegmentsFilter ) {
         let originalComponentDidMount =  SegmentsFilter.prototype.componentDidMount;
         let originaldefaultState =  SegmentsFilter.prototype.defaultState;
