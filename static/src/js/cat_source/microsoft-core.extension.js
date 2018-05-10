@@ -1,6 +1,6 @@
 
 
-(function(SF) {
+(function(SF, QA_GLOSSARY) {
 
     let filte_size = '50';
     let filter_type = 'regular_intervals';
@@ -23,6 +23,12 @@
             CatToolActions.closeSubHeader();
             this.open = false;
         }
+
+    });
+
+    $.extend(QA_GLOSSARY, {
+
+        qaCheckRegExpFlags: 'gi'
 
     });
 
@@ -62,4 +68,4 @@
     }
     overrideSegmentsFilter(SegmentFilter);
 
-})(SegmentFilter) ;
+})(SegmentFilter, QaCheckGlossary) ;
