@@ -12,6 +12,7 @@ use API\V2\Json\ProjectUrls;
 use Features\Microsoft\Utils\Email\ConfirmedQuotationEmail;
 use Features\Microsoft\Utils\Email\ErrorQuotationEmail;
 use Features\Microsoft\View\API\JSON\MicrosoftUrlsDecorator;
+use Features\Microsoft\Model\Analysis\CustomPayableRates;
 use Klein\Klein;
 use Features;
 use \Features\Outsource\Traits\Translated as TranslatedTrait;
@@ -61,6 +62,20 @@ class Microsoft extends BaseFeature {
      */
     public function doNotManageAlternativeTranslations( $boolean ){
         return false;
+    }
+
+    /**
+     *
+     * Payable Rates customization hook
+     *
+     * @param $payableRates
+     * @param $SourceLang
+     * @param $TargetLang
+     *
+     * @return array
+     */
+    public function filterPayableRates( $payableRates, $SourceLang, $TargetLang ){
+        return CustomPayableRates::getPayableRates( $SourceLang, $TargetLang );
     }
 
     /**

@@ -26,7 +26,7 @@ class ErrorQuotationEmail extends AbstractEmail {
 
     public function send() {
         $config =  Microsoft::getConfig();
-        $this->sendTo($config['success_quotation_email_address'], "Translated Team");
+        $this->sendTo($config['error_quotation_email_address'], "Translated Team");
     }
 
     public function setErrorMessage($message){
