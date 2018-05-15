@@ -7,6 +7,7 @@
  */
 
 namespace Features\Microsoft\Utils\Email;
+
 use Email\AbstractEmail;
 use Features\Microsoft;
 use INIT;
@@ -14,6 +15,9 @@ use INIT;
 class ConfirmedQuotationEmail extends AbstractEmail {
 
     protected $title = 'Confirmed Quotation';
+    protected $internal_project_id;
+    protected $internal_job_id;
+    protected $external_project_id;
 
 
     public function __construct( $templatePath ) {
@@ -23,13 +27,27 @@ class ConfirmedQuotationEmail extends AbstractEmail {
     }
 
     public function send() {
-        $config =  Microsoft::getConfig();
-        $this->sendTo($config['success_quotation_email_address'], "Translated Team");
+        $config = Microsoft::getConfig();
+        $this->sendTo( $config[ 'success_quotation_email_address' ], "Translated Team" );
+    }
+
+    public function setInternalIdProject( $id ) {
+        $this->internal_project_id = $id;
+    }
+
+    public function setInternalJobId( $id ) {
+        $this->internal_job_id = $id;
+    }
+
+    public function setExternalProjectId( $id ) {
+        $this->external_project_id = $id;
     }
 
     protected function _getTemplateVariables() {
         return [
-
+                'internal_project_id' => $this->internal_project_id,
+                'internal_job_id'     => $this->internal_job_id,
+                'external_project_id' => $this->external_project_id
         ];
     }
 

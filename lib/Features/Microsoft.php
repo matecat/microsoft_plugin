@@ -47,10 +47,10 @@ class Microsoft extends BaseFeature {
         return $displayButton ;
     }
 
-    public function afterTMAnalysisCloseProject( $project_id ) {
+    public function afterTMAnalysisCloseProject( $project_id , $_analyzed_report) {
         $this->setSuccessMailSender( new ConfirmedQuotationEmail( self::getPluginBasePath() . '/Features/Microsoft/View/Emails/confirmed_quotation.html' ) );
         $this->setFailureMailSender( new ErrorQuotationEmail( self::getPluginBasePath() . '/Features/Microsoft/View/Emails/error_quotation.html' ) );
-        $this->requestQuote( $project_id );
+        $this->requestQuote( $project_id, $_analyzed_report );
     }
 
     /**

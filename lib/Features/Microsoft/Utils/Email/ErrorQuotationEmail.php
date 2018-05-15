@@ -8,14 +8,18 @@
 
 
 namespace Features\Microsoft\Utils\Email;
+
 use Email\AbstractEmail;
 use Features\Microsoft;
 use INIT;
 
 class ErrorQuotationEmail extends AbstractEmail {
 
-    protected $title = 'Quotation gone in error';
+    protected $title = 'Project creation went in error';
     protected $message;
+    protected $internal_project_id;
+    protected $internal_job_id;
+    protected $external_project_id;
 
 
     public function __construct( $templatePath ) {
@@ -25,17 +29,32 @@ class ErrorQuotationEmail extends AbstractEmail {
     }
 
     public function send() {
-        $config =  Microsoft::getConfig();
-        $this->sendTo($config['error_quotation_email_address'], "Translated Team");
+        $config = Microsoft::getConfig();
+        $this->sendTo( $config[ 'error_quotation_email_address' ], "Translated Team" );
     }
 
-    public function setErrorMessage($message){
+    public function setErrorMessage( $message ) {
         $this->message = $message;
+    }
+
+    public function setInternalIdProject( $id ) {
+        $this->internal_project_id = $id;
+    }
+
+    public function setInternalJobId( $id ) {
+        $this->internal_job_id = $id;
+    }
+
+    public function setExternalProjectId( $id ) {
+        $this->external_project_id = $id;
     }
 
     protected function _getTemplateVariables() {
         return [
-            'message' => $this->message
+                'internal_project_id' => $this->internal_project_id,
+                'internal_job_id'     => $this->internal_job_id,
+                'external_project_id' => $this->external_project_id,
+                'message'             => $this->message
         ];
     }
 
