@@ -83,6 +83,10 @@ class Microsoft extends BaseFeature {
     }
 
     public function filterDifferentSourceAndTargetIsTranslated( $originalValue, $projectStructure, $xliff_trans_unit ) {
+        $match_quality = (int)str_replace( "%", "", $xliff_trans_unit[ 'alt-trans' ][ 'attr' ][ 'match-quality' ] );
+        if ( $match_quality > 100 ) {
+            return $originalValue;
+        }
         return false;
     }
 
