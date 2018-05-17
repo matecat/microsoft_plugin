@@ -54,6 +54,42 @@ class Microsoft extends BaseFeature {
     }
 
     /**
+     * @param $iceLockArray array
+     *
+     * <code>
+     *  [
+     *      'approved'         => @$translation_row [ 4 ][ 'attr' ][ 'approved' ],
+     *      'locked'           => 0,
+     *      'match_type'       => 'ICE',
+     *      'eq_word_count'    => 0,
+     *      'status'           => $status,
+     *      'suggestion_match' => null,
+     *      'trans-unit'       => $translation_row[ 4 ],
+     *  ]
+     * </code>
+     *
+     * @return array $iceLockArray
+     */
+    public function setICESLockFromXliffValues( $iceLockArray ) {
+        $match_quality = (int)str_replace( "%", "", $iceLockArray[ 'trans-unit' ][ 'alt-trans' ][ 'attr' ][ 'match-quality' ] );
+
+        if ( $match_quality > 100 ) {
+            $iceLockArray[ 'locked' ] = 1;
+            $iceLockArray[ 'status' ] = \Constants_TranslationStatus::STATUS_APPROVED;
+        }
+
+        if ( $match_quality == 100 ) {
+            $iceLockArray[ 'locked' ]           = 0;
+            $iceLockArray[ 'status' ]           = \Constants_TranslationStatus::STATUS_TRANSLATED;
+            $iceLockArray[ 'match_type' ]       = \Constants_SegmentTranslationsMatchType::_100;
+            $iceLockArray[ 'suggestion_match' ] = 100;
+        }
+
+        return $iceLockArray;
+
+    }
+
+    /**
      * Send the alt-trans to MyMemory
      *
      * @param $boolean
