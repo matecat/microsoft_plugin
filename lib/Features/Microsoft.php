@@ -126,4 +126,17 @@ class Microsoft extends BaseFeature {
         return $default_pattern."i"; // regex with case insensitive only for microsoft
     }
 
+    /**
+     * Lock 100% matches in TManalysis
+     *
+     * @param $tm_data
+     * @param $queueElementParams
+     *
+     * @return mixed
+     */
+    public function check100MatchLocked( $tm_data, $queueElementParams ){
+        $tm_data[ 'status' ] = \Constants_TranslationStatus::STATUS_TRANSLATED;
+        return $tm_data;
+    }
+
 }
