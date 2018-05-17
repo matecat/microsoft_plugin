@@ -78,15 +78,12 @@ class Microsoft extends BaseFeature {
             $iceLockArray[ 'status' ] = \Constants_TranslationStatus::STATUS_APPROVED;
         }
 
-        if ( $match_quality == 100 ) {
-            $iceLockArray[ 'locked' ]           = 0;
-            $iceLockArray[ 'status' ]           = \Constants_TranslationStatus::STATUS_TRANSLATED;
-            $iceLockArray[ 'match_type' ]       = \Constants_SegmentTranslationsMatchType::_100;
-            $iceLockArray[ 'suggestion_match' ] = 100;
-        }
-
         return $iceLockArray;
 
+    }
+
+    public function filterDifferentSourceAndTargetIsTranslated( $originalValue, $projectStructure, $xliff_trans_unit ) {
+        return false;
     }
 
     /**
