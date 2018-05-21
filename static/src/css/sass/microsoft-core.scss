@@ -12,6 +12,9 @@
         display: none;
     }
 
+    .tab-switcher-notes {
+        display: none;
+    }
 }
 
 body.review {
@@ -24,10 +27,6 @@ body.review {
     }
 
     #advanced-filter, .advanced-filter-searchbox.searchbox {
-        display: none;
-    }
-
-    .tab-switcher-notes {
         display: none;
     }
 }
