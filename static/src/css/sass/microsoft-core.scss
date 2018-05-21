@@ -22,4 +22,8 @@ body.review {
     .advanced-filter-searchbox #clear-filter {
         display: none;
     }
+
+    #advanced-filter, .advanced-filter-searchbox.searchbox {
+        display: none;
+    }
 }
