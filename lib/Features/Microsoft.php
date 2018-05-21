@@ -73,7 +73,7 @@ class Microsoft extends BaseFeature {
     public function setICESLockFromXliffValues( $iceLockArray ) {
         $match_quality = (int)str_replace( "%", "", $iceLockArray[ 'trans-unit' ][ 'alt-trans' ][ 'attr' ][ 'match-quality' ] );
 
-        if ( $match_quality > 100 ) {
+        if ( $match_quality >= 100 && $iceLockArray['trans-unit']['target']['attr']['state'] == "final" ) {
             $iceLockArray[ 'locked' ] = 1;
             $iceLockArray[ 'status' ] = \Constants_TranslationStatus::STATUS_APPROVED;
         }
@@ -84,7 +84,7 @@ class Microsoft extends BaseFeature {
 
     public function filterDifferentSourceAndTargetIsTranslated( $originalValue, $projectStructure, $xliff_trans_unit ) {
         $match_quality = (int)str_replace( "%", "", $xliff_trans_unit[ 'alt-trans' ][ 'attr' ][ 'match-quality' ] );
-        if ( $match_quality > 100 ) {
+        if ( $match_quality >= 100 ) {
             return $originalValue;
         }
         return false;
@@ -130,17 +130,5 @@ class Microsoft extends BaseFeature {
         return $default_pattern."i"; // regex with case insensitive only for microsoft
     }
 
-    /**
-     * Lock 100% matches in TManalysis
-     *
-     * @param $tm_data
-     * @param $queueElementParams
-     *
-     * @return mixed
-     */
-    public function check100MatchLocked( $tm_data, $queueElementParams ){
-        $tm_data[ 'status' ] = \Constants_TranslationStatus::STATUS_TRANSLATED;
-        return $tm_data;
-    }
 
 }
