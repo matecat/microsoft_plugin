@@ -11,10 +11,6 @@
     .data-sample-checkbox-container {
         display: none;
     }
-
-    .tab-switcher-notes {
-        display: none;
-    }
 }
 
 body.review {
@@ -29,4 +25,7 @@ body.review {
     #advanced-filter, .advanced-filter-searchbox.searchbox {
         display: none;
     }
+}
+body.tab-switcher-notes {
+    display: none;
 }
