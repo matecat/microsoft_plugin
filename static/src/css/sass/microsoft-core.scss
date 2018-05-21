@@ -12,14 +12,14 @@
         display: none;
     }
 
-    #clear-filter {
-        display: none;
-    }
-
 }
 
 body.review {
     .header-dropdown-menu {
+        display: none;
+    }
+
+    .advanced-filter-searchbox #clear-filter {
         display: none;
     }
 }

@@ -1,7 +1,7 @@
 
 
 (function(SF, QA_GLOSSARY) {
-
+    let original_closeFilter = SF.closeFilter;
     let filte_size = '50';
     let filter_type = 'regular_intervals';
     $.extend(UI, {
@@ -20,8 +20,12 @@
     $.extend(SF, {
 
         closeFilter: function (  ) {
-            CatToolActions.closeSubHeader();
-            this.open = false;
+            if ( config.isReview ) {
+                CatToolActions.closeSubHeader();
+                this.open = false;
+            } else {
+                original_closeFilter.apply(this);
+            }
         }
 
     });
