@@ -130,5 +130,10 @@ class Microsoft extends BaseFeature {
         return $default_pattern."i"; // regex with case insensitive only for microsoft
     }
 
+    public function filterSegmentFilter( Features\SegmentFilter\Model\FilterDefinition $filterDefinition, \Chunks_ChunkStruct $chunk ) {
+        if ( $filterDefinition->sampleType() == 'regular_intervals' ) {
+            $filterDefinition->setCustomCondition("  (st.match_type != 'ICE' or st.locked != 1) ", [] );
+        }
+    }
 
 }
