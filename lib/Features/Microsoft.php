@@ -32,6 +32,7 @@ class Microsoft extends BaseFeature {
 
     public static function loadRoutes( Klein $klein ) {
         //route( '/job/[:id_job]/[:password]/sign_off', 'GET', 'Features\Microsoft\Controller\SignOffController', 'signedOffCallback' );
+        route( '/job/[:id_job]/[:password]/hts', 'GET', 'Features\Microsoft\Controller\TranslatedConnectorController', 'sendJob' );
     }
 
     public static function projectUrls( ProjectUrls $formatted ) {
@@ -50,7 +51,7 @@ class Microsoft extends BaseFeature {
     public function afterTMAnalysisCloseProject( $project_id , $_analyzed_report) {
         $this->setSuccessMailSender( new ConfirmedQuotationEmail( self::getPluginBasePath() . '/Features/Microsoft/View/Emails/confirmed_quotation.html' ) );
         $this->setFailureMailSender( new ErrorQuotationEmail( self::getPluginBasePath() . '/Features/Microsoft/View/Emails/error_quotation.html' ) );
-        $this->requestQuote( $project_id, $_analyzed_report );
+        $this->requestProjectQuote( $project_id, $_analyzed_report );
     }
 
     /**
