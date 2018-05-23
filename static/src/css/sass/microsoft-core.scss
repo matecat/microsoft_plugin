@@ -11,15 +11,30 @@
     .data-sample-checkbox-container {
         display: none;
     }
-
-    #clear-filter {
-        display: none;
-    }
-
 }
 
 body.review {
     .header-dropdown-menu {
         display: none;
     }
+
+    .advanced-filter-searchbox #clear-filter {
+        display: none;
+    }
+
+    #advanced-filter, .advanced-filter-searchbox.searchbox {
+        display: none;
+    }
 }
+body .tab-switcher-notes {
+    display: none;
+}
+
+//****** Manage *******//
+body.manage {
+    .job-delivery {
+        display: none !important;
+    }
+}
+
+//*********************//
