@@ -13,6 +13,7 @@ use Features\Microsoft\Utils\Email\ConfirmedQuotationEmail;
 use Features\Microsoft\Utils\Email\ErrorQuotationEmail;
 use Features\Microsoft\View\API\JSON\MicrosoftUrlsDecorator;
 use Features\Microsoft\Model\Analysis\CustomPayableRates;
+use Features\Microsoft\Utils\Constants\Revise;
 use Klein\Klein;
 use Features;
 use \Features\Outsource\Traits\Translated as TranslatedTrait;
@@ -26,7 +27,6 @@ class Microsoft extends BaseFeature {
     public static $dependencies = [
             Features::PROJECT_COMPLETION,
             Features::TRANSLATION_VERSIONS,
-            Features::REVIEW_IMPROVED,
             Features::QACHECK_GLOSSARY
     ];
 
@@ -135,6 +135,17 @@ class Microsoft extends BaseFeature {
         if ( $filterDefinition->sampleType() == 'regular_intervals' ) {
             $filterDefinition->setCustomCondition("  (st.match_type != 'ICE' or st.locked != 1) ", [] );
         }
+    }
+
+    public function overrideReviseJobQA( $jobQA, $id_job, $password_job, $job_words ) {
+        return [
+                new \Revise_JobQA(
+                        $id_job,
+                        $password_job,
+                        $job_words,
+                        new Revise()
+                ), new Revise()
+        ];
     }
 
 }

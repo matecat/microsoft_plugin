@@ -46,7 +46,6 @@ class TranslatedConnectorController extends KleinController {
         $this->config = Microsoft::getConfig();
 
         $eq_word = \Jobs_JobDao::getEQWord($this->job);
-        $eq_word = number_format( $eq_word + 0.00000001, 0, ".", "," );
 
         $this->setSuccessMailSender( new ConfirmedQuotationEmail( Microsoft::getPluginBasePath() . '/Features/Microsoft/View/Emails/confirmed_quotation.html' ) );
         $this->setFailureMailSender( new ErrorQuotationEmail( Microsoft::getPluginBasePath() . '/Features/Microsoft/View/Emails/error_quotation.html' ) );
