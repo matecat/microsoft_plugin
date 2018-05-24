@@ -19,5 +19,5 @@ class Revise extends \Constants_Revise{
     const MAX_TERMINOLOGY  = 1;
     const MAX_QUALITY      = 3;
     const MAX_STYLE        = 7;
-    
+
 }
