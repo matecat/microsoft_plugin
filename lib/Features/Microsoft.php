@@ -155,10 +155,36 @@ class Microsoft extends BaseFeature {
      * @return array
      */
     public function overrideConversionRequest( Array $array ){
+
         if( \CatUtils::isCJK( $array[ 'target' ] ) ){
+
             $array[ 'target' ] = 'it-IT';
+
+            $array[ 'path' ];
+
+            if ( is_file( $array[ 'path' ] ) === true ) {
+
+                $file = fopen( $array[ 'path' ], 'r' );
+                $temp = tempnam( '/tmp', 'mic_' );
+
+                if ( is_resource( $file ) === true ) {
+
+                    while ( feof( $file ) === false ) {
+                        file_put_contents( $temp, str_replace( $array[ 'target' ], 'it-IT', fgets( $file ) ), FILE_APPEND );
+                    }
+
+                    fclose( $file );
+                }
+
+                unlink( $array[ 'path' ] );
+                rename( $temp, $array[ 'path' ] );
+
+            }
+
         }
+
         return $array;
+
     }
 
 }
