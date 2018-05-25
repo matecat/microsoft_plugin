@@ -26,6 +26,14 @@ body.review {
         display: none;
     }
 }
+
+body.translate {
+    footer {
+        .wrapper nav ul li:nth-child(2) {
+            display: none;
+        }
+    }
+}
 body .tab-switcher-notes {
     display: none;
 }
