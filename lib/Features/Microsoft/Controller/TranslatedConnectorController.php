@@ -28,7 +28,7 @@ class TranslatedConnectorController extends KleinController {
         $jobValidator = ( new JobPasswordValidator( $this ) );
 
         $jobValidator->onSuccess( function () use ( $jobValidator ) {
-            $this->job     = $jobValidator->getJob();
+            $this->job     = ( new \Jobs_JobDao() )->read( $jobValidator->getJob()->id )[ 0 ];
             $this->project = $this->job->getProject();
         } );
 
