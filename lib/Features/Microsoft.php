@@ -148,4 +148,22 @@ class Microsoft extends BaseFeature {
         ];
     }
 
+    /**
+     * Because of a bug in filters we force languages conversion to it-IT when isCJK
+     * @param array $array
+     *
+     * @return array
+     */
+    public function overrideConversionRequest( $language ){
+        if( \CatUtils::isCJK( $language ) ){
+            $language = 'it-IT';
+        }
+        return $language;
+    }
+
+    public function overrideConversionResult( $documentContent, $language ){
+        return preg_replace( '/target-language=".*?"/', "target-language=\"{$language}\"", $documentContent );
+    }
+
+
 }
