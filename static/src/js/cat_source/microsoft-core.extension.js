@@ -1,9 +1,9 @@
 
-
 (function(SF, QA_GLOSSARY) {
     let original_closeFilter = SF.closeFilter;
     let filte_size = '50';
     let filter_type = 'regular_intervals';
+
     $.extend(UI, {
         showFixWarningsModal: function (  ) {
             APP.confirm({
@@ -13,6 +13,16 @@
                 onCancel: 'markJobAsComplete',
                 cancelTxt: 'Mark as complete',
                 msg: 'Unresolved glossary and/or tag issues are preventing you from completing your translation. <br>Please fix the issues.'
+            });
+        },
+        showFixWarningsOnDownload( continueDownloadFunction ) {
+            APP.confirm({
+                name: 'confirmDownload', // <-- this is the name of the function that gets invoked?
+                cancelTxt: 'Fix errors',
+                onCancel: 'goToFirstError',
+                callback: continueDownloadFunction,
+                okTxt: 'Download anyway',
+                msg: 'Unresolved glossary and/or tag issues may prevent downloading your translation. Please fix the issues. <br /><br /> If you continue downloading, part of the content may be untranslated - look for the string UNTRANSLATED_CONTENT in the downloaded files.'
             });
         }
     });
