@@ -11,9 +11,9 @@ namespace Features\Microsoft\Controller;
 use API\V2\KleinController;
 use API\V2\Validators\JobPasswordValidator;
 use API\V2\Json\ProjectUrls;
+use DataAccess\ShapelessConcreteStruct;
 use Features\Microsoft\Utils\Email\ConfirmedQuotationEmail;
 use Features\Microsoft\Utils\Email\ErrorQuotationEmail;
-use Features\Microsoft\View\API\JSON\MicrosoftUrlsDecorator;
 use Features\Microsoft;
 use \Features\Outsource\Traits\Translated as TranslatedTrait;
 
@@ -21,11 +21,17 @@ class TranslatedConnectorController extends KleinController {
 
     use TranslatedTrait;
 
+    protected $job;
+    protected $project;
+
     protected function afterConstruct() {
         $jobValidator = ( new JobPasswordValidator( $this ) );
 
         $jobValidator->onSuccess( function () use ( $jobValidator ) {
-            $this->job     = $jobValidator->getJob();
+            $job = new \Jobs_JobStruct();
+            $job->id = $jobValidator->getJob()->id;
+            $job->password = $jobValidator->getJob()->password;
+            $this->job     = ( new \Jobs_JobDao() )->read( $job )[ 0 ];
             $this->project = $this->job->getProject();
         } );
 
@@ -45,15 +51,15 @@ class TranslatedConnectorController extends KleinController {
 
         $this->config = Microsoft::getConfig();
 
-        $eq_word = \Jobs_JobDao::getTODOWords($this->job);
+        $eq_word = \Jobs_JobDao::getTODOWords( $this->job );
 
         $this->setSuccessMailSender( new ConfirmedQuotationEmail( Microsoft::getPluginBasePath() . '/Features/Microsoft/View/Emails/confirmed_quotation.html' ) );
         $this->setFailureMailSender( new ErrorQuotationEmail( Microsoft::getPluginBasePath() . '/Features/Microsoft/View/Emails/error_quotation.html' ) );
-        $response = $this->requestJobQuote($this->job, $eq_word, $this->project, $formatted);
-        if(!empty($response)){
-            $this->response->body( "ok - ".$this->getExternalProjectId()  );
-        }else{
-            $this->response->body( "ko"  );
+        $response = $this->requestJobQuote( $this->job, $eq_word, $this->project, $formatted );
+        if ( !empty( $response ) ) {
+            $this->response->body( "ok - " . $this->getExternalProjectId() );
+        } else {
+            $this->response->body( "ko" );
         }
 
     }
