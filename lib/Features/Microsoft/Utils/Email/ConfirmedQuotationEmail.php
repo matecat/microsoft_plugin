@@ -18,6 +18,7 @@ class ConfirmedQuotationEmail extends AbstractEmail {
     protected $internal_project_id;
     protected $internal_job_id;
     protected $external_project_id;
+    protected $project_words_count;
 
 
     public function __construct( $templatePath ) {
@@ -43,11 +44,16 @@ class ConfirmedQuotationEmail extends AbstractEmail {
         $this->external_project_id = $id;
     }
 
+    public function setProjectWordsCount( $count ) {
+        $this->project_words_count = $count;
+    }
+
     protected function _getTemplateVariables() {
         return [
                 'internal_project_id' => $this->internal_project_id,
                 'internal_job_id'     => $this->internal_job_id,
-                'external_project_id' => $this->external_project_id
+                'external_project_id' => $this->external_project_id,
+                'project_words_count' => $this->project_words_count,
         ];
     }
 
