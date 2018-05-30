@@ -27,7 +27,7 @@ body.review {
     }
 }
 
-body.translate {
+body:not(.review) {
     footer {
         .wrapper nav ul li:nth-child(2) {
             display: none;
