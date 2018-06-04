@@ -22,7 +22,7 @@
                 onCancel: 'goToFirstError',
                 callback: continueDownloadFunction,
                 okTxt: 'Download anyway',
-                msg: 'Unresolved glossary and/or tag issues may prevent downloading your translation. Please fix the issues. <br /><br /> If you continue downloading, part of the content may be untranslated - look for the string UNTRANSLATED_CONTENT in the downloaded files.'
+                msg: 'Unresolved glossary and/or tag issues may prevent downloading your translation. Please fix the issues.'
             });
         }
     });
