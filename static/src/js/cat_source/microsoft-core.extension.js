@@ -73,15 +73,15 @@
             let storedState = SegmentFilter.getStoredState();
             if (config.isReview && !storedState.reactState) {
                 return {
-                    searchSettingsOpen: false,
                     selectedStatus: '',
-                    samplingEnabled: true,
                     samplingType: filter_type,
                     samplingSize: filte_size,
                     filtering: false,
                     filteredCount: 0,
                     segmentsArray: [],
-                    moreFilters: this.moreFilters
+                    moreFilters: this.moreFilters,
+                    filtersEnabled: true,
+                    dataSampleEnabled: true,
 
                 }
             } else {

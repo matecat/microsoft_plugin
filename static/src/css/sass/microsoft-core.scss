@@ -1,14 +1,6 @@
 
-.advanced-filter-searchbox {
-    .filters-container {
-        display: none;
-    }
-
-    .search-settings {
-        display: none;
-    }
-
-    .data-sample-checkbox-container {
+.filter-wrapper {
+    .filter-activities {
         display: none;
     }
 }
@@ -22,7 +14,7 @@ body.review {
         display: none;
     }
 
-    #advanced-filter, .advanced-filter-searchbox.searchbox {
+    #advanced-filter, .filter-wrapper {
         display: none;
     }
 }
