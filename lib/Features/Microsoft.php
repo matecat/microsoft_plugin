@@ -14,13 +14,15 @@ use Features\Microsoft\Utils\Email\ErrorQuotationEmail;
 use Features\Microsoft\View\API\JSON\MicrosoftUrlsDecorator;
 use Features\Microsoft\Model\Analysis\CustomPayableRates;
 use Features\Microsoft\Utils\Constants\Revise;
+use Features\Traits\PhManagementTagTrait;
+use Features\Traits\XliffConversionTrait;
 use Klein\Klein;
 use Features;
 use \Features\Outsource\Traits\Translated as TranslatedTrait;
 
 class Microsoft extends BaseFeature {
 
-    use TranslatedTrait;
+    use TranslatedTrait, XliffConversionTrait, PhManagementTagTrait;
 
     const FEATURE_CODE = "microsoft";
 
@@ -154,16 +156,16 @@ class Microsoft extends BaseFeature {
      *
      * @return array
      */
-    public function overrideConversionRequest( $language ){
-        if( \CatUtils::isCJK( $language ) ){
-            $language = 'it-IT';
-        }
-        return $language;
-    }
+//    public function overrideConversionRequest( $language ){
+//        if( \CatUtils::isCJK( $language ) ){
+//            $language = 'it-IT';
+//        }
+//        return $language;
+//    }
 
-    public function overrideConversionResult( $documentContent, $language ){
-        return preg_replace( '/target-language=".*?"/', "target-language=\"{$language}\"", $documentContent );
-    }
+//    public function overrideConversionResult( $documentContent, $language ){
+//        return preg_replace( '/target-language=".*?"/', "target-language=\"{$language}\"", $documentContent );
+//    }
 
 
 }
