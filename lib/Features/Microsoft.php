@@ -74,11 +74,17 @@ class Microsoft extends BaseFeature {
      * @return array $iceLockArray
      */
     public function setICESLockFromXliffValues( $iceLockArray ) {
-        $match_quality = (int)str_replace( "%", "", $iceLockArray[ 'trans-unit' ][ 'alt-trans' ][ 'attr' ][ 'match-quality' ] );
 
-        if ( $match_quality >= 100 && $iceLockArray['trans-unit']['target']['attr']['state'] == "final" ) {
-            $iceLockArray[ 'locked' ] = 1;
-            $iceLockArray[ 'status' ] = \Constants_TranslationStatus::STATUS_APPROVED;
+        foreach ( $iceLockArray[ 'trans-unit' ][ 'alt-trans' ] as $altTrans ) {
+
+            $match_quality = (int)str_replace( "%", "", $altTrans[ 'attr' ][ 'match-quality' ] );
+
+            if ( $match_quality >= 100 && $iceLockArray[ 'trans-unit' ][ 'target' ][ 'attr' ][ 'state' ] == "final" ) {
+                $iceLockArray[ 'locked' ] = 1;
+                $iceLockArray[ 'status' ] = \Constants_TranslationStatus::STATUS_APPROVED;
+                break;
+            }
+
         }
 
         return $iceLockArray;
@@ -86,11 +92,21 @@ class Microsoft extends BaseFeature {
     }
 
     public function filterDifferentSourceAndTargetIsTranslated( $originalValue, $projectStructure, $xliff_trans_unit ) {
-        $match_quality = (int)str_replace( "%", "", $xliff_trans_unit[ 'alt-trans' ][ 'attr' ][ 'match-quality' ] );
-        if ( $match_quality >= 100 ) {
-            return $originalValue;
+
+        $found = false;
+
+        foreach ( $xliff_trans_unit[ 'trans-unit' ][ 'alt-trans' ] as $altTrans ) {
+
+            $match_quality = (int)str_replace( "%", "", $altTrans[ 'attr' ][ 'match-quality' ] );
+
+            if ( $match_quality >= 100 ) {
+                $found = $originalValue;
+            }
+
         }
-        return false;
+
+        return $found;
+
     }
 
     /**
