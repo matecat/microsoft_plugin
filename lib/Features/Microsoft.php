@@ -8,6 +8,7 @@
 
 namespace Features;
 
+use Analysis\Workers\TMAnalysisWorker;
 use API\V2\Json\ProjectUrls;
 use Features\Microsoft\Utils\Email\ConfirmedQuotationEmail;
 use Features\Microsoft\Utils\Email\ErrorQuotationEmail;
@@ -164,6 +165,35 @@ class Microsoft extends BaseFeature {
                         new Revise()
                 ), new Revise()
         ];
+    }
+
+    /**
+     * @see TMAnalysisWorker::_getMatches()
+     * @param array $matches
+     *
+     * @return array
+     */
+    public function modifyMatches( Array $matches ){
+        foreach( $matches as $pos => $match ){
+
+            foreach( $match[ "tm_properties" ] as $_p => $property ){
+
+                if( $property[ 'type' ] != 'x-match-quality' ) {
+                    continue;
+                }
+
+                /*
+                 * Microsoft send alt-trans with the same source of the real source, MyMemory identify these matches as 100% because of src == src
+                 * We force these matches to be 99
+                 */
+                if( $property[ 'value' ] < 100 && (int)str_replace( "%", "", $match[ 'match' ] ) >= 100 ){
+                    $matches[ $pos ][ 'match' ] = '99%';
+                }
+
+            }
+
+        }
+        return $matches;
     }
 
     /**
