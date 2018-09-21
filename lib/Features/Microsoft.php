@@ -186,7 +186,7 @@ class Microsoft extends BaseFeature {
                  * Microsoft send alt-trans with the same source of the real source, MyMemory identify these matches as 100% because of src == src
                  * We force these matches to be 99
                  */
-                if( $property[ 'value' ] < 100 && (int)str_replace( "%", "", $match[ 'match' ] ) >= 100 ){
+                if( (int)str_replace( "%", "", $property[ 'value' ] ) < 100 && (int)str_replace( "%", "", $match[ 'match' ] ) >= 100 ){
                     $matches[ $pos ][ 'match' ] = '99%';
                 }
 
