@@ -96,7 +96,7 @@ class Microsoft extends BaseFeature {
 
         $found = false;
 
-        foreach ( $xliff_trans_unit[ 'trans-unit' ][ 'alt-trans' ] as $altTrans ) {
+        foreach ( $xliff_trans_unit[ 'alt-trans' ] as $altTrans ) {
 
             $match_quality = (int)str_replace( "%", "", $altTrans[ 'attr' ][ 'match-quality' ] );
 
