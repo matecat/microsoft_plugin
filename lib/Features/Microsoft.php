@@ -10,6 +10,7 @@ namespace Features;
 
 use Analysis\Workers\TMAnalysisWorker;
 use API\V2\Json\ProjectUrls;
+use ArrayObject;
 use Features\Microsoft\Utils\Email\ConfirmedQuotationEmail;
 use Features\Microsoft\Utils\Email\ErrorQuotationEmail;
 use Features\Microsoft\View\API\JSON\MicrosoftUrlsDecorator;
@@ -58,6 +59,8 @@ class Microsoft extends BaseFeature {
     }
 
     /**
+     * @see \ProjectManager::_insertPreTranslations()
+     *
      * @param $iceLockArray array
      *
      * <code>
@@ -80,7 +83,7 @@ class Microsoft extends BaseFeature {
 
             $match_quality = (int)str_replace( "%", "", $altTrans[ 'attr' ][ 'match-quality' ] );
 
-            if ( $match_quality >= 100 && $iceLockArray[ 'trans-unit' ][ 'target' ][ 'attr' ][ 'state' ] == "final" ) {
+            if ( $match_quality >= 100 && @$iceLockArray[ 'trans-unit' ][ 'target' ][ 'attr' ][ 'state' ] == "final" ) {
                 $iceLockArray[ 'locked' ] = 1;
                 $iceLockArray[ 'status' ] = \Constants_TranslationStatus::STATUS_APPROVED;
                 break;
@@ -92,15 +95,23 @@ class Microsoft extends BaseFeature {
 
     }
 
+    /**
+     * @see \ProjectManager::__isTranslated()
+     * @param $originalValue
+     * @param $projectStructure
+     * @param $xliff_trans_unit
+     *
+     * @return bool
+     */
     public function filterDifferentSourceAndTargetIsTranslated( $originalValue, $projectStructure, $xliff_trans_unit ) {
 
         $found = false;
 
         foreach ( $xliff_trans_unit[ 'alt-trans' ] as $altTrans ) {
 
-            $match_quality = (int)str_replace( "%", "", $altTrans[ 'attr' ][ 'match-quality' ] );
+            $match_quality = (int)str_replace( "%", "", @$altTrans[ 'attr' ][ 'match-quality' ] );
 
-            if ( $match_quality >= 100 ) {
+            if ( $match_quality > 100 && $xliff_trans_unit[ 'target' ][ 'attr' ][ 'state' ] == "final" ) {
                 $found = $originalValue;
             }
 
@@ -108,6 +119,54 @@ class Microsoft extends BaseFeature {
 
         return $found;
 
+    }
+
+    /**
+     * @see TMAnalysisWorker::_getMatches()
+     * @param array $matches
+     *
+     * @return array
+     */
+    public function modifyMatches( Array $matches ){
+        foreach( $matches as $pos => $match ){
+
+            foreach( $match[ "tm_properties" ] as $_p => $property ){
+
+                if( $property[ 'type' ] != 'x-match-quality' ) {
+                    continue;
+                }
+
+                /*
+                 * Microsoft send alt-trans with the same source of the real source, MyMemory identify these matches as 100% because of src == src
+                 * We force these matches to be 99
+                 */
+                if( (int)str_replace( "%", "", $property[ 'value' ] ) == 99 && (int)str_replace( "%", "", $match[ 'match' ] ) >= 100 ){
+                    $matches[ $pos ][ 'match' ] = '99%';
+                } elseif(  (int)str_replace( "%", "", $property[ 'value' ] ) < 99 && (int)str_replace( "%", "", $match[ 'match' ] ) == 100  ){
+                    $matches[ $pos ][ 'match' ] = 'MT';
+                }
+
+            }
+
+        }
+        return $matches;
+    }
+
+    public function handleTUContextGroups( ArrayObject $projectStructure ){
+
+        foreach ( $projectStructure[ 'context-group' ] as $internal_id => $context_group ) {
+
+            foreach ( $context_group[ 'context_json' ] as $index => $group ) {
+                if( $group[ 'attr' ][ 'name' ] == "Microsoft Internal" ){
+                    unset( $projectStructure[ 'context-group' ][ $internal_id ][ 'context_json' ][ $index ] );
+                }
+            }
+
+            if( count( $projectStructure[ 'context-group' ][ $internal_id ][ 'context_json' ] ) == 0 ){
+                $projectStructure[ 'context-group' ]->offsetUnset( $internal_id );
+            }
+
+        }
     }
 
     /**
@@ -165,35 +224,6 @@ class Microsoft extends BaseFeature {
                         new Revise()
                 ), new Revise()
         ];
-    }
-
-    /**
-     * @see TMAnalysisWorker::_getMatches()
-     * @param array $matches
-     *
-     * @return array
-     */
-    public function modifyMatches( Array $matches ){
-        foreach( $matches as $pos => $match ){
-
-            foreach( $match[ "tm_properties" ] as $_p => $property ){
-
-                if( $property[ 'type' ] != 'x-match-quality' ) {
-                    continue;
-                }
-
-                /*
-                 * Microsoft send alt-trans with the same source of the real source, MyMemory identify these matches as 100% because of src == src
-                 * We force these matches to be 99
-                 */
-                if( (int)str_replace( "%", "", $property[ 'value' ] ) < 100 && (int)str_replace( "%", "", $match[ 'match' ] ) >= 100 ){
-                    $matches[ $pos ][ 'match' ] = '99%';
-                }
-
-            }
-
-        }
-        return $matches;
     }
 
     /**
