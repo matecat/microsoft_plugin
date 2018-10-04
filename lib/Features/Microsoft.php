@@ -24,7 +24,7 @@ use \Features\Outsource\Traits\Translated as TranslatedTrait;
 
 class Microsoft extends BaseFeature {
 
-    use TranslatedTrait, XliffConversionTrait, PhManagementTagTrait;
+    use TranslatedTrait, PhManagementTagTrait;
 
     const FEATURE_CODE = "microsoft";
 
@@ -152,6 +152,11 @@ class Microsoft extends BaseFeature {
         return $matches;
     }
 
+    /**
+     * @see \ProjectManager::insertContextsForFile()
+     *
+     * @param ArrayObject $projectStructure
+     */
     public function handleTUContextGroups( ArrayObject $projectStructure ){
 
         foreach ( $projectStructure[ 'context-group' ] as $internal_id => $context_group ) {
@@ -232,16 +237,40 @@ class Microsoft extends BaseFeature {
      *
      * @return array
      */
-//    public function overrideConversionRequest( $language ){
-//        if( \CatUtils::isCJK( $language ) ){
-//            $language = 'it-IT';
-//        }
-//        return $language;
-//    }
+    public function overrideConversionRequest( $language ){
+        if( \CatUtils::isCJK( $language ) ){
+            $language = 'it-IT';
+        }
+        return $language;
+    }
 
-//    public function overrideConversionResult( $documentContent, $language ){
-//        return preg_replace( '/target-language=".*?"/', "target-language=\"{$language}\"", $documentContent );
-//    }
+    public function overrideConversionResult( $documentContent, $language ){
+        return preg_replace( '/target-language=".*?"/', "target-language=\"{$language}\"", $documentContent );
+    }
 
+    /**
+     * Override the instance decision to convert or not the normal xlf/xliff files
+     *
+     * @param $forceXliff
+     *
+     * @param $_userIsLogged
+     *
+     * @param $xliffPath
+     *
+     * @return bool
+     */
+    public function forceXLIFFConversion( $forceXliff, $_userIsLogged, $xliffPath ) {
+        if( !$_userIsLogged ) {
+            return $forceXliff;
+        }
+        $fileInfo = \DetectProprietaryXliff::getInfo( $xliffPath );
+        if ( isset( $fileInfo[ 0 ] ) ) {
+            preg_match( '#tool-id\s*=\s*"mdxliff"#i', $fileInfo[ 0 ], $matches );
+            if ( !empty( $matches ) ) {
+                return true;
+            }
+        }
+        return $forceXliff;
+    }
 
 }
