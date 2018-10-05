@@ -263,14 +263,14 @@ class Microsoft extends BaseFeature {
         if( !$_userIsLogged ) {
             return $forceXliff;
         }
-        $fileInfo = \DetectProprietaryXliff::getInfo( $xliffPath );
+        $fileInfo = \DetectProprietaryXliff::isXliff( null, $xliffPath );
         if ( isset( $fileInfo[ 0 ] ) ) {
             preg_match( '#tool-id\s*=\s*"mdxliff"#i', $fileInfo[ 0 ], $matches );
             if ( !empty( $matches ) ) {
                 return true;
             }
         }
-        return $forceXliff;
+        return false;
     }
 
 }
