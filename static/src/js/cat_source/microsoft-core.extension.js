@@ -91,4 +91,6 @@
     }
     overrideSegmentsFilter(SegmentFilter);
 
+    SegmentTabMessages.prototype.excludeMatchingNotesRegExp = new RegExp(/(adjWordcount|curWordcount)/m);
+
 })(SegmentFilter, QaCheckGlossary) ;
