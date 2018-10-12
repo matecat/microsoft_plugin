@@ -53,9 +53,10 @@ class Microsoft extends BaseFeature {
     }
 
     public function afterTMAnalysisCloseProject( $project_id , $_analyzed_report) {
+        $projectStruct = \Projects_ProjectDao::findById( $project_id );
         $this->setSuccessMailSender( new ConfirmedQuotationEmail( self::getPluginBasePath() . '/Features/Microsoft/View/Emails/confirmed_quotation.html' ) );
         $this->setFailureMailSender( new ErrorQuotationEmail( self::getPluginBasePath() . '/Features/Microsoft/View/Emails/error_quotation.html' ) );
-        $this->requestProjectQuote( $project_id, $_analyzed_report );
+        $this->requestProjectQuote( $projectStruct, $_analyzed_report );
     }
 
     /**
