@@ -9,11 +9,11 @@
 namespace Features\Microsoft\View\API\JSON;
 
 
-use \Features\ReviewExtended\View\API\JSON\ProjectUrlsDecorator as UrlDecorator;
+use \Features\ReviewExtended\View\API\JSON\ProjectUrlsDecorator;
 use LQA\ChunkReviewDao;
 
 
-class MicrosoftUrlsDecorator extends UrlDecorator {
+class MicrosoftUrlsDecorator extends ProjectUrlsDecorator {
 
     public function reviseUrl( $record ) {
 
