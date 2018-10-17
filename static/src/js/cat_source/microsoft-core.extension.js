@@ -89,7 +89,28 @@
             }
         }
     }
+
+    function overrideSegmentsMatches( SegmentTabMatches ) {
+
+        SegmentTabMatches.prototype.processMatchCallback = function ( item ) {
+            if ( item.percentText === '100%' && !_.isUndefined(item.tm_properties) && item.tm_properties.length > 0 ) {
+                let matchProp = item.tm_properties.find((prop)=>{
+                    return prop.type === "x-match-quality";
+                });
+                if ( matchProp && parseInt(matchProp.value) < 99 ) {
+                    return null;
+                } else if ( matchProp && parseInt(matchProp.value) === 99 ) {
+                    item.percentText = '99%';
+                    item.percentClass = "per-orange";
+                    return item;
+                }
+            }
+            return item;
+
+        };
+    }
     overrideSegmentsFilter(SegmentFilter);
+    overrideSegmentsMatches(SegmentTabMatches);
 
     SegmentTabMessages.prototype.excludeMatchingNotesRegExp = new RegExp(/(adjWordcount|curWordcount)/m);
 
