@@ -28,6 +28,8 @@ class Microsoft extends BaseFeature {
 
     const FEATURE_CODE = "microsoft";
 
+    protected $logger_name = self::FEATURE_CODE;
+
     public static $dependencies = [
             Features::PROJECT_COMPLETION,
             Features::TRANSLATION_VERSIONS,
@@ -313,15 +315,22 @@ class Microsoft extends BaseFeature {
 
     /**
      * Because of a bug in filters we force languages conversion to it-IT when isCJK
-     * @param array $array
      *
-     * @return array
+     * @param string $language
+     * @param string $filePath
+     *
+     * @return string
      */
-    public function overrideConversionRequest( $language ){
-        if( \CatUtils::isCJK( $language ) ){
-            $language = 'it-IT';
+    public function changeXliffTargetLangCode( $language, $filePath ){
+
+        if( $this->needsConversion( $filePath ) ){
+            if( \CatUtils::isCJK( $language ) ){
+                $language = 'it-IT';
+            }
         }
+
         return $language;
+
     }
 
     public function overrideConversionResult( $documentContent, $language ){
@@ -343,6 +352,10 @@ class Microsoft extends BaseFeature {
         if( !$_userIsLogged ) {
             return $forceXliff;
         }
+        return $this->needsConversion( $xliffPath );
+    }
+
+    private function needsConversion( $xliffPath ){
         $fileInfo = \DetectProprietaryXliff::isXliff( null, $xliffPath );
         if ( isset( $fileInfo[ 0 ] ) ) {
             preg_match( '#tool-id\s*=\s*"mdxliff"#i', $fileInfo[ 0 ], $matches );
