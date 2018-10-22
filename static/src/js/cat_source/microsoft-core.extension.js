@@ -93,7 +93,7 @@
     function overrideSegmentsMatches( SegmentTabMatches ) {
 
         SegmentTabMatches.prototype.processMatchCallback = function ( item ) {
-            if ( item.percentText === '100%' && item.tm_propertie && item.tm_properties.length > 0 ) {
+            if ( item.percentText === '100%' && item.tm_properties && item.tm_properties.length > 0 ) {
                 let matchProp = item.tm_properties.find((prop)=>{
                     return prop.type === "x-match-quality";
                 });
