@@ -323,9 +323,14 @@ class Microsoft extends BaseFeature {
      */
     public function changeXliffTargetLangCode( $language, $filePath ){
 
-        if( $this->needsConversion( $filePath ) ){
-            if( \CatUtils::isCJK( $language ) ){
-                $language = 'it-IT';
+        $fileInfo = \DetectProprietaryXliff::isXliff( null, $filePath );
+        if ( isset( $fileInfo[ 0 ] ) ) {
+            //this allow xlf converted with matecat filters to be back converted with the CJK language fix
+            preg_match( '#tool-id\s*=\s*"matecat-converter#i', $fileInfo[ 0 ], $matches );
+            if ( !empty( $matches ) ) {
+                if( \CatUtils::isCJK( $language ) ){
+                    $language = 'it-IT';
+                }
             }
         }
 
@@ -352,10 +357,6 @@ class Microsoft extends BaseFeature {
         if( !$_userIsLogged ) {
             return $forceXliff;
         }
-        return $this->needsConversion( $xliffPath );
-    }
-
-    private function needsConversion( $xliffPath ){
         $fileInfo = \DetectProprietaryXliff::isXliff( null, $xliffPath );
         if ( isset( $fileInfo[ 0 ] ) ) {
             preg_match( '#tool-id\s*=\s*"mdxliff"#i', $fileInfo[ 0 ], $matches );
