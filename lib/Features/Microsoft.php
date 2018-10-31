@@ -143,7 +143,7 @@ class Microsoft extends BaseFeature {
     /**
      * @see \ProjectManager::_insertPreTranslations()
      *
-     * @param $iceLockArray array
+     * @param $structArray array
      *
      * <code>
      *  [
@@ -154,26 +154,50 @@ class Microsoft extends BaseFeature {
      *      'status'           => $status,
      *      'suggestion_match' => null,
      *      'trans-unit'       => $translation_row[ 4 ],
+     *      'payable_rates'    => [
+     *                              'NO_MATCH'    => 100,
+     *                              '50%-74%'     => 100,
+     *                              '75%-84%'     => 60,
+     *                              '85%-94%'     => 60,
+     *                              '95%-99%'     => 60,
+     *                              '100%'        => 30,
+     *                              '100%_PUBLIC' => 30,
+     *                              'REPETITIONS' => 30,
+     *                              'INTERNAL'    => 60,
+     *                              'MT'          => 80
+     *                           ]
      *  ]
      * </code>
      *
      * @return array $iceLockArray
      */
-    public function setICESLockFromXliffValues( $iceLockArray ) {
+    public function setSegmentTranslationFromXliffValues( $structArray ) {
 
-        foreach ( $iceLockArray[ 'trans-unit' ][ 'alt-trans' ] as $altTrans ) {
+        foreach ( $structArray[ 'trans-unit' ][ 'alt-trans' ] as $altTrans ) {
 
             $match_quality = (int)str_replace( "%", "", $altTrans[ 'attr' ][ 'match-quality' ] );
 
-            if ( $match_quality >= 100 && @$iceLockArray[ 'trans-unit' ][ 'target' ][ 'attr' ][ 'state' ] == "final" ) {
-                $iceLockArray[ 'locked' ] = 1;
-                $iceLockArray[ 'status' ] = \Constants_TranslationStatus::STATUS_APPROVED;
+            if ( $match_quality >= 100 && @$structArray[ 'trans-unit' ][ 'target' ][ 'attr' ][ 'state' ] == "final" ) {
+                $structArray[ 'locked' ] = 1;
+                $structArray[ 'status' ] = \Constants_TranslationStatus::STATUS_APPROVED;
                 break;
+            } elseif ( $match_quality == 10 ) {
+                /**
+                 * Standard word count is needed
+                 *
+                 * @see getProjectSegmentsTranslationSummary
+                 */
+                $wordCount                            = \CatUtils::segment_raw_wordcount( $structArray[ 'trans-unit' ][ 'source' ][ 'raw-content' ] );
+                $payableRates                         = json_decode( $structArray[ 'payable_rates' ], true );
+                $structArray[ 'match_type' ]          = 'MT';
+                $structArray[ 'eq_word_count' ]       = $wordCount * $payableRates[ 'MT' ] / 100;
+                $structArray[ 'standard_word_count' ] = $wordCount;
+                $structArray[ 'status' ]              = \Constants_TranslationStatus::STATUS_DRAFT;
             }
 
         }
 
-        return $iceLockArray;
+        return $structArray;
 
     }
 
@@ -194,6 +218,8 @@ class Microsoft extends BaseFeature {
             $match_quality = (int)str_replace( "%", "", @$altTrans[ 'attr' ][ 'match-quality' ] );
 
             if ( $match_quality > 100 && $xliff_trans_unit[ 'target' ][ 'attr' ][ 'state' ] == "final" ) {
+                $found = $originalValue;
+            } elseif( $match_quality == 10 ){
                 $found = $originalValue;
             }
 
@@ -268,6 +294,8 @@ class Microsoft extends BaseFeature {
     }
 
     /**
+     *
+     * @see \ProjectManager::_createJobs()
      *
      * Payable Rates customization hook
      *
