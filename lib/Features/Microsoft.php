@@ -71,7 +71,7 @@ class Microsoft extends BaseFeature {
                     CURLOPT_SSL_VERIFYPEER => true,
                     CURLOPT_SSL_VERIFYHOST => 2,
                     CURLOPT_HTTPHEADER     => [
-                            'Authorization: Basic ' . 'one_policheck_pass', //key1
+                            'Authorization: Basic ' . $config[ 'one_policheck_pass' ], //key1
                             'Content-Type: application/json',
                     ],
                     CURLOPT_POSTFIELDS     => json_encode( [
