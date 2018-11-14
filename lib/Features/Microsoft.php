@@ -61,7 +61,7 @@ class Microsoft extends BaseFeature {
         $mh     = new \MultiCurlHandler();
         $hashes = [ ];
 
-        foreach ( $projectStructure[ 'target_language' ] as $target_lang ) {
+        foreach ( $projectStructure[ 'target_language' ] as $k=>$target_lang ) {
 
             $curl_additional_params = [
                     CURLOPT_HEADER         => false,
@@ -75,7 +75,7 @@ class Microsoft extends BaseFeature {
                             'Content-Type: application/json',
                     ],
                     CURLOPT_POSTFIELDS     => json_encode( [
-                            "projectid"        => $projectStructure[ 'id_project' ],
+                            "projectid"        => $projectStructure[ 'array_jobs' ]['job_list'][$k] . "-" . $projectStructure[ 'array_jobs' ]['job_pass'][$k] ,
                             "partnerid"        => $config[ 'one_policheck_user' ],
                             "sourceLocale"     => $projectStructure[ 'source_language' ],
                             "targetLocale"     => $target_lang,
