@@ -52,6 +52,62 @@ class Microsoft extends BaseFeature {
         return $projectUrlsDecorator;
     }
 
+    /**
+     * @param $projectStructure
+     */
+    public function postProjectCommit( $projectStructure ) {
+
+        $config = self::getConfig();
+        $mh     = new \MultiCurlHandler();
+        $hashes = [ ];
+
+        foreach ( $projectStructure[ 'target_language' ] as $k=>$target_lang ) {
+
+            $curl_additional_params = [
+                    CURLOPT_HEADER         => false,
+                    CURLOPT_RETURNTRANSFER => true,
+                    CURLOPT_USERAGENT      => \INIT::MATECAT_USER_AGENT . \INIT::$BUILD_NUMBER,
+                    CURLOPT_CONNECTTIMEOUT => 10, // a timeout to call itself should not be too much higher :D
+                    CURLOPT_SSL_VERIFYPEER => true,
+                    CURLOPT_SSL_VERIFYHOST => 2,
+                    CURLOPT_HTTPHEADER     => [
+                            'Authorization: Basic ' . $config[ 'one_policheck_pass' ], //key1
+                            'Content-Type: application/json',
+                    ],
+                    CURLOPT_POSTFIELDS     => json_encode( [
+                            "projectid"        => $projectStructure[ 'array_jobs' ]['job_list'][$k] . "-" . $projectStructure[ 'array_jobs' ]['job_pass'][$k] ,
+                            "partnerid"        => $config[ 'one_policheck_user' ],
+                            "sourceLocale"     => $projectStructure[ 'source_language' ],
+                            "targetLocale"     => $target_lang,
+                            "spellcheck"       => false,
+                            "data"             => [ ],
+                            "isEmpty"          => true,
+                            "policheckEnabled" => true
+                    ] )
+            ];
+            $hashes[] = $mh->createResource( $config[ 'one_policheck_url' ], $curl_additional_params );
+        }
+
+        $mh->multiExec();
+        $mh->multiCurlCloseAll();
+        foreach ( $hashes as $hash ) {
+            if ( $mh->hasError( $hash ) ) {
+                $info_project = "";
+                foreach ( $mh->getOptionRequest( $hash ) as $info ) {
+                    if ( is_array( $info ) ) {
+                        $info_project .= implode( $info ) . " ";
+                    } else {
+                        $info_project .= $info . " ";
+                    }
+                }
+                $error = implode( $mh->getError( $hash ) );
+                \Log::doLog( "error OnePolicheck: " . $info_project . " error: " . $error );
+                $this->getLogger()->error( "error OnePolicheck: " . $info_project . " error: " . $error );
+                \Utils::sendErrMailReport( "error OnePolicheck: " . $info_project . " error: " . $error );
+            }
+        }
+    }
+
     public function filterProjectCompletionDisplayButton($displayButton, Features\ProjectCompletion\Decorator\CatDecorator $decorator) {
         if ( $decorator->getController()->isRevision() ) {
             return false;
