@@ -37,7 +37,6 @@ class Microsoft extends BaseFeature {
     ];
 
     public static function loadRoutes( Klein $klein ) {
-        //route( '/job/[:id_job]/[:password]/sign_off', 'GET', 'Features\Microsoft\Controller\SignOffController', 'signedOffCallback' );
         route( '/job/[:id_job]/[:password]/hts', 'GET', 'Features\Microsoft\Controller\TranslatedConnectorController', 'sendJob' );
     }
 
