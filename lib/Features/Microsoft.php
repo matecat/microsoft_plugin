@@ -46,13 +46,15 @@ class Microsoft extends BaseFeature {
      * @return MicrosoftUrlsDecorator|\Features\ReviewExtended\View\API\JSON\ProjectUrlsDecorator
      */
     public static function projectUrls( ProjectUrls $formatted ) {
-        $projectUrlsDecorator = new MicrosoftUrlsDecorator( $formatted->getData());
+        $projectUrlsDecorator = new MicrosoftUrlsDecorator( $formatted->getData() );
 
         return $projectUrlsDecorator;
     }
 
     /**
      * @param $projectStructure
+     *
+     * @throws \Exception
      */
     public function postProjectCommit( $projectStructure ) {
 
