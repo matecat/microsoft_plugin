@@ -37,7 +37,6 @@ class Microsoft extends BaseFeature {
     ];
 
     public static function loadRoutes( Klein $klein ) {
-        //route( '/job/[:id_job]/[:password]/sign_off', 'GET', 'Features\Microsoft\Controller\SignOffController', 'signedOffCallback' );
         route( '/job/[:id_job]/[:password]/hts', 'GET', 'Features\Microsoft\Controller\TranslatedConnectorController', 'sendJob' );
     }
 
@@ -226,6 +225,7 @@ class Microsoft extends BaseFeature {
      * </code>
      *
      * @return array $iceLockArray
+     * @throws \Exception
      */
     public function setSegmentTranslationFromXliffValues( $structArray ) {
 
@@ -243,7 +243,7 @@ class Microsoft extends BaseFeature {
                  *
                  * @see getProjectSegmentsTranslationSummary
                  */
-                $wordCount                            = \CatUtils::segment_raw_wordcount( $structArray[ 'trans-unit' ][ 'source' ][ 'raw-content' ] );
+                $wordCount                            = \CatUtils::segment_raw_word_count( $structArray[ 'trans-unit' ][ 'source' ][ 'raw-content' ] );
                 $payableRates                         = json_decode( $structArray[ 'payable_rates' ], true );
                 $structArray[ 'match_type' ]          = 'MT';
                 $structArray[ 'eq_word_count' ]       = $wordCount * $payableRates[ 'MT' ] / 100;
