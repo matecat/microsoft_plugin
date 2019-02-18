@@ -9,10 +9,13 @@
 namespace Features;
 
 use Analysis\Workers\TMAnalysisWorker;
+use Exceptions\ValidationError;
 use API\V2\Json\ProjectUrls;
 use ArrayObject;
+use Exception;
 use Features\Microsoft\Utils\Email\ConfirmedQuotationEmail;
 use Features\Microsoft\Utils\Email\ErrorQuotationEmail;
+use Features\Microsoft\Utils\Metadata;
 use Features\Microsoft\View\API\JSON\MicrosoftUrlsDecorator;
 use Features\Microsoft\Model\Analysis\CustomPayableRates;
 use Features\Microsoft\Utils\Constants\Revise;
@@ -453,4 +456,23 @@ class Microsoft extends BaseFeature {
         return false;
     }
 
+    public function filterNewProjectInputFilters( $inputFilter ) {
+        return array_merge( $inputFilter, Metadata::getInputFilter() ) ;
+    }
+
+    public function filterProjectMetadata( $metadata, $__postInput ) {
+        if (empty( $__postInput[ Metadata::PROJECT_TYPE_METADATA_KEY ] ) ){
+            $__postInput[ Metadata::PROJECT_TYPE_METADATA_KEY ] = Metadata::TRANSLATE_TYPE ;
+        }
+
+        $valid_types = Metadata::$valid_project_types  ;
+        $valid_types_string = implode(', ', $valid_types );
+        if ( !in_array( $__postInput[ Metadata::PROJECT_TYPE_METADATA_KEY ], $valid_types ) ) {
+            throw new ValidationError( "Project type '{$__postInput[ Metadata::PROJECT_TYPE_METADATA_KEY ]}'' is not allowed. Allowed types: [ $valid_types_string ]." );
+        }
+
+        $metadata[ Metadata::PROJECT_TYPE_METADATA_KEY ] = $__postInput[ Metadata::PROJECT_TYPE_METADATA_KEY ];
+
+        return $metadata;
+    }
 }
