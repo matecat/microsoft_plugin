@@ -229,37 +229,25 @@ class Microsoft extends BaseFeature {
      *  ]
      * </code>
      *
+     * @param $projectStruct
+     *
      * @return array $iceLockArray
-     * @throws \Exception
      */
-    public function setSegmentTranslationFromXliffValues( $structArray ) {
+    public function setSegmentTranslationFromXliffValues( $structArray, $projectStruct ) {
+        $payableRates = json_decode( $structArray[ 'payable_rates' ], true );
+        $wordCount    = \CatUtils::segment_raw_word_count( $structArray[ 'trans-unit' ][ 'source' ][ 'raw-content' ] );
 
-        foreach ( $structArray[ 'trans-unit' ][ 'alt-trans' ] as $altTrans ) {
+        if ( $projectStruct['metadata']['project_type'] == Metadata::TRANSLATE_TYPE ) {
+            $structArray = $this->_setSegmentTranslationFromXliffValuesForTranslate( $structArray, $wordCount, $payableRates );
+        }
 
-            $match_quality = (int)str_replace( "%", "", $altTrans[ 'attr' ][ 'match-quality' ] );
-
-            if ( $match_quality >= 100 && @$structArray[ 'trans-unit' ][ 'target' ][ 'attr' ][ 'state' ] == "final" ) {
-                $structArray[ 'locked' ] = 1;
-                $structArray[ 'status' ] = \Constants_TranslationStatus::STATUS_APPROVED;
-                break;
-            } elseif ( $match_quality == 10 ) {
-                /**
-                 * Standard word count is needed
-                 *
-                 * @see getProjectSegmentsTranslationSummary
-                 */
-                $wordCount                            = \CatUtils::segment_raw_word_count( $structArray[ 'trans-unit' ][ 'source' ][ 'raw-content' ] );
-                $payableRates                         = json_decode( $structArray[ 'payable_rates' ], true );
-                $structArray[ 'match_type' ]          = 'MT';
-                $structArray[ 'eq_word_count' ]       = $wordCount * $payableRates[ 'MT' ] / 100;
-                $structArray[ 'standard_word_count' ] = $wordCount;
-                $structArray[ 'status' ]              = \Constants_TranslationStatus::STATUS_DRAFT;
-            }
-
+        elseif ($projectStruct['metadata']['project_type'] == Metadata::REVIEW_TYPE) {
+            $structArray[ 'match_type' ]    = 'ICE';
+            $structArray[ 'eq_word_count' ] = $wordCount * $payableRates[ '100%' ] / 100;
+            $structArray[ 'status' ]        = \Constants_TranslationStatus::STATUS_DRAFT;
         }
 
         return $structArray;
-
     }
 
     /**
@@ -474,5 +462,37 @@ class Microsoft extends BaseFeature {
         $metadata[ Metadata::PROJECT_TYPE_METADATA_KEY ] = $__postInput[ Metadata::PROJECT_TYPE_METADATA_KEY ];
 
         return $metadata;
+    }
+
+    /**
+     * @param $structArray
+     * @param $wordCount
+     * @param $payableRates
+     *
+     * @return mixed
+     */
+    protected function _setSegmentTranslationFromXliffValuesForTranslate( $structArray, $wordCount, $payableRates ) {
+        foreach ( $structArray[ 'trans-unit' ][ 'alt-trans' ] as $altTrans ) {
+
+            $match_quality = (int)str_replace( "%", "", $altTrans[ 'attr' ][ 'match-quality' ] );
+
+            if ( $match_quality >= 100 && @$structArray[ 'trans-unit' ][ 'target' ][ 'attr' ][ 'state' ] == "final" ) {
+                $structArray[ 'locked' ] = 1;
+                $structArray[ 'status' ] = \Constants_TranslationStatus::STATUS_APPROVED;
+                break;
+            } elseif ( $match_quality == 10 ) {
+                /**
+                 * Standard word count is needed
+                 *
+                 * @see getProjectSegmentsTranslationSummary
+                 */
+                $structArray[ 'match_type' ]          = 'MT';
+                $structArray[ 'eq_word_count' ]       = $wordCount * $payableRates[ 'MT' ] / 100;
+                $structArray[ 'standard_word_count' ] = $wordCount;
+                $structArray[ 'status' ]              = \Constants_TranslationStatus::STATUS_DRAFT;
+            }
+        }
+
+        return $structArray;
     }
 }
