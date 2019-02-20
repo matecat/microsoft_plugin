@@ -9,25 +9,21 @@
 namespace Features;
 
 use Analysis\Workers\TMAnalysisWorker;
-use Exceptions\ValidationError;
 use API\V2\Json\ProjectUrls;
 use ArrayObject;
-use Exception;
-use Features\Microsoft\Utils\Email\ConfirmedQuotationEmail;
-use Features\Microsoft\Utils\Email\ErrorQuotationEmail;
-use Features\Microsoft\Utils\Metadata;
-use Features\Microsoft\View\API\JSON\MicrosoftUrlsDecorator;
+use Exceptions\ValidationError;
+use Features;
 use Features\Microsoft\Model\Analysis\CustomPayableRates;
 use Features\Microsoft\Utils\Constants\Revise;
+use Features\Microsoft\Utils\Metadata;
+use Features\Microsoft\View\API\JSON\MicrosoftUrlsDecorator;
 use Features\Outsource\Constants\ServiceTypes;
 use Features\Traits\PhManagementTagTrait;
 use Klein\Klein;
-use Features;
-use \Features\Outsource\Traits\Translated as TranslatedTrait;
 
 class Microsoft extends BaseFeature {
 
-    use TranslatedTrait, PhManagementTagTrait;
+    use PhManagementTagTrait;
 
     const FEATURE_CODE = "microsoft";
 
@@ -119,87 +115,6 @@ class Microsoft extends BaseFeature {
         return $displayButton ;
     }
 
-    public function afterTMAnalysisCloseProject( $project_id , $_analyzed_report) {
-        $projectStruct = \Projects_ProjectDao::findById( $project_id );
-        $this->setSuccessMailSender( new ConfirmedQuotationEmail( self::getPluginBasePath() . '/Features/Microsoft/View/Emails/confirmed_quotation.html' ) );
-        $this->setFailureMailSender( new ErrorQuotationEmail( self::getPluginBasePath() . '/Features/Microsoft/View/Emails/error_quotation.html' ) );
-        $this->requestProjectQuote( $projectStruct, $_analyzed_report );
-    }
-
-    /**
-     * @param \Jobs_JobStruct         $job
-     * @param                         $eq_word
-     * @param \Projects_ProjectStruct $project
-     *
-     * @return string
-     */
-    protected function prepareQuoteUrl( \Jobs_JobStruct $job, $eq_word, \Projects_ProjectStruct $project ){
-
-        if( $project->id_customer == $this->config[ 'microsoft_user1' ] ){
-            $hts_user = $this->config[ 'translated_username_pilot1' ];
-            $hts_pass = $this->config[ 'translated_password_pilot1' ];
-        } elseif( $project->id_customer == $this->config[ 'microsoft_user2' ] ) {
-            $hts_user = $this->config[ 'translated_username_pilot2' ];
-            $hts_pass = $this->config[ 'translated_password_pilot2' ];
-        } else {
-            $hts_user = 'microsoftdemo';
-            $hts_pass = 'microsoftdemo';
-        }
-
-        return "http://www.translated.net/hts/index.php?" . http_build_query( [
-                        'f'             => 'quote',
-                        'cid'           => $hts_user,
-                        'p'             => $hts_pass,
-                        's'             => $job->source,
-                        't'             => $job->target,
-                        'pn'            => $project->name,
-                        'w'             => $eq_word,
-                        'df'            => 'matecat',
-                        'matecat_pid'   => $project->id,
-                        'matecat_ppass' => $project->password,
-                        'matecat_pname' => $project->name,
-                        'subject'       => $job->subject,
-                        'jt'            => ServiceTypes::SERVICE_TYPE_PROFESSIONAL,
-                        'fd'            => 0,
-                        'of'            => 'json',
-                        'matecat_raw'   => $job->total_raw_wc
-                ], PHP_QUERY_RFC3986 );
-
-    }
-
-    /**
-     * @param                         $urls
-     * @param \Projects_ProjectStruct $project
-     *
-     * @return string
-     */
-    protected function prepareConfirmUrl( $urls, \Projects_ProjectStruct $project ){
-
-        if( $project->id_customer == $this->config[ 'microsoft_user1' ] ){
-            $hts_user = $this->config[ 'translated_username_pilot1' ];
-            $hts_pass = $this->config[ 'translated_password_pilot1' ];
-        } elseif( $project->id_customer == $this->config[ 'microsoft_user2' ] ) {
-            $hts_user = $this->config[ 'translated_username_pilot2' ];
-            $hts_pass = $this->config[ 'translated_password_pilot2' ];
-        } else {
-            $hts_user = 'microsoftdemo';
-            $hts_pass = 'microsoftdemo';
-        }
-
-        return "http://www.translated.net/hts/index.php?" . http_build_query( [
-                        'f'             => 'confirm',
-                        'cid'           => $hts_user,
-                        'p'             => $hts_pass,
-                        'pid'           => $this->external_project_id,
-                        'c'             => 1,
-                        'of'            => "json",
-                        'urls'          => json_encode( $urls ),
-                        'append_to_pid' => ( !empty( $this->external_parent_project_id ) ? $this->external_parent_project_id : null ),
-                        'matecat_host'  => parse_url( \INIT::$HTTPHOST, PHP_URL_HOST )
-                ], PHP_QUERY_RFC3986 );
-
-    }
-
     /**
      * @see \ProjectManager::_insertPreTranslations()
      *
@@ -266,7 +181,6 @@ class Microsoft extends BaseFeature {
         $found = false;
 
         foreach ( $xliff_trans_unit[ 'alt-trans' ] as $altTrans ) {
-
             $match_quality = (int)str_replace( "%", "", @$altTrans[ 'attr' ][ 'match-quality' ] );
 
             if ( $match_quality > 100 && $xliff_trans_unit[ 'target' ][ 'attr' ][ 'state' ] == "final" ) {
@@ -274,11 +188,9 @@ class Microsoft extends BaseFeature {
             } elseif( $match_quality == 10 ){
                 $found = $originalValue;
             }
-
         }
 
         return $found;
-
     }
 
     /**
