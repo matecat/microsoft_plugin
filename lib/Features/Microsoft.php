@@ -241,7 +241,7 @@ class Microsoft extends BaseFeature {
             $structArray = $this->_setSegmentTranslationFromXliffValuesForTranslate( $structArray, $wordCount, $payableRates );
         }
 
-        elseif ($projectStruct['metadata']['project_type'] == Metadata::REVIEW_TYPE) {
+        elseif ( $projectStruct['metadata']['project_type'] == Metadata::REVIEW_TYPE) {
             $structArray[ 'match_type' ]    = 'ICE';
             $structArray[ 'eq_word_count' ] = $wordCount * $payableRates[ '100%' ] / 100;
             $structArray[ 'status' ]        = \Constants_TranslationStatus::STATUS_DRAFT;
@@ -259,6 +259,9 @@ class Microsoft extends BaseFeature {
      * @return bool
      */
     public function filterDifferentSourceAndTargetIsTranslated( $originalValue, $projectStructure, $xliff_trans_unit ) {
+        if ( $projectStructure['metadata']['project_type'] == Metadata::REVIEW_TYPE ) {
+            return true ;
+        }
 
         $found = false;
 
