@@ -31,7 +31,8 @@ class Microsoft extends BaseFeature {
     public static $dependencies = [
             Features::PROJECT_COMPLETION,
             Features::TRANSLATION_VERSIONS,
-            Features::QACHECK_GLOSSARY
+            Features::QACHECK_GLOSSARY,
+            Features::REVIEW_EXTENDED
     ];
 
     public static function loadRoutes( Klein $klein ) {
