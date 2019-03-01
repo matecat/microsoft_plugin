@@ -17,7 +17,6 @@ use Features\Microsoft\Model\Analysis\CustomPayableRates;
 use Features\Microsoft\Utils\Constants\Revise;
 use Features\Microsoft\Utils\Metadata;
 use Features\Microsoft\View\API\JSON\MicrosoftUrlsDecorator;
-use Features\Outsource\Constants\ServiceTypes;
 use Features\Traits\PhManagementTagTrait;
 use Klein\Klein;
 
@@ -147,6 +146,7 @@ class Microsoft extends BaseFeature {
      * @param $projectStruct
      *
      * @return array $iceLockArray
+     * @throws \Exception
      */
     public function setSegmentTranslationFromXliffValues( $structArray, $projectStruct ) {
         $payableRates = json_decode( $structArray[ 'payable_rates' ], true );
@@ -281,7 +281,7 @@ class Microsoft extends BaseFeature {
     public function validateProjectCreation( $projectStructure )  {
         //override Revise Improved qa Model
         $qa_mode_file = realpath( self::getPluginBasePath() . "/../qa_model.json" );
-        ReviewImproved::loadAndValidateModelFromJsonFile( $projectStructure, $qa_mode_file );
+        ReviewExtended::loadAndValidateModelFromJsonFile( $projectStructure, $qa_mode_file );
     }
 
     public function glossaryMatchPattern($default_pattern) {
