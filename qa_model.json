@@ -5,52 +5,100 @@
 
     "categories": [
       {
-        "label": "Translation Errors",
+        "label": "Accuracy",
         "severities" : false,
         "subcategories" : [
+          { "label": "Addition" },
+          { "label": "Omission" },
           { "label": "Mistranslation" },
-          { "label": "Omissions" },
-          { "label": "Additions" }
+          { "label": "Over-translation" },
+          { "label": "Under-translation" },
+          { "label": "Untranslated" },
+          { "label": "Improper exact TM match" }
          ]
       },
       {
-        "label": "Microsoft-specific Terminology Inconsistency"
-      },
-      {
-        "label": "Generic Terminology Issue"
-      },
-      {
-        "label": "Language quality (grammar, punctuation, spelling)"
-      },
-      {
-        "label": "Language Quality",
+        "label": "Fluency",
         "severities" : false,
         "subcategories" : [
+          { "label": "Punctuation" },
+          { "label": "Spelling" },
           { "label": "Grammar" },
-          { "label": "Punctation" },
-          { "label": "Spelling" }
+          { "label": "Grammatical register" },
+          { "label": "Inconsistency" },
+          { "label": "Link/crossreference" },
+          { "label": "Character encoding" }
         ]
       },
       {
-        "label" : "Readability"
+        "label": "Terminology",
+        "severities" : false,
+        "subcategories" : [
+          { "label": "Inconsistent with termbase" },
+          { "label": "Inconsistent use of terminology" }
+        ]
+      },
+      {
+        "label": "Style",
+        "severities" : false,
+        "subcategories" : [
+          { "label": "Awkward" },
+          { "label": "Company Style" },
+          { "label": "Inconsistent style" },
+          { "label": "Third-part style" },
+          { "label": "Unidiomatic" }
+        ]
+      },
+      {
+        "label": "Design",
+        "severities" : false,
+        "subcategories" : [
+          { "label": "Length" },
+          { "label": "Local formatting" },
+          { "label": "Markup" },
+          { "label": "Missing Text" },
+          { "label": "Truncation/text expansion" }
+        ]
+      },
+      {
+        "label" : "Local convention",
+        "severities" : false,
+        "subcategories" : [
+          { "label": "Address format" },
+          { "label": "Date format" },
+          { "label": "Currency format" },
+          { "label": "Measurement format" },
+          { "label": "Shortcut key" },
+          { "label": "Telephone format" }
+        ]
+      },
+      {
+        "label" : "Verity",
+        "severities" : false,
+        "subcategories" : [
+          { "label": "Culture-specific reference" }
+        ]
+      },
+      {
+        "label" : "Other"
       }
     ],
       "severities": [
         {
-          "label": "None",
+          "label": "Preferential",
           "penalty": 0
         },
         {
-          "label": "Minor",
-          "penalty": 0.3
-        },
-        {
-          "label": "Error",
+          "label": "Normal impact",
           "penalty": 1
         },
         {
+          "label": "High impact",
+          "penalty": 5
+        },
+        {
           "label": "Critical",
-          "penalty": 1000
+          "penalty": 10
         }
       ],
 
