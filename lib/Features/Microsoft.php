@@ -146,12 +146,14 @@ class Microsoft extends BaseFeature {
      *
      * @param $projectStruct
      *
+     * @param $filter
+     *
      * @return array $iceLockArray
      * @throws \Exception
      */
-    public function setSegmentTranslationFromXliffValues( $structArray, $projectStruct ) {
+    public function setSegmentTranslationFromXliffValues( $structArray, $projectStruct, $filter ) {
         $payableRates = json_decode( $structArray[ 'payable_rates' ], true );
-        $wordCount    = \CatUtils::segment_raw_word_count( $structArray[ 'trans-unit' ][ 'source' ][ 'raw-content' ] );
+        $wordCount    = \CatUtils::segment_raw_word_count( $structArray[ 'trans-unit' ][ 'source' ][ 'raw-content' ], 'en-US', $filter );
 
         if ( $projectStruct['metadata']['project_type'] == Metadata::TRANSLATE_TYPE ) {
             $structArray = $this->_setSegmentTranslationFromXliffValuesForTranslate( $structArray, $wordCount, $payableRates );
