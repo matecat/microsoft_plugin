@@ -5,16 +5,16 @@
     }
 }
 
-body.review {
-
-    .advanced-filter-searchbox #clear-filter {
-        display: none;
-    }
-
-    #advanced-filter, .filter-wrapper {
-        display: none;
-    }
-}
+//body.review {
+//
+//    .advanced-filter-searchbox #clear-filter {
+//        display: none;
+//    }
+//
+//    #advanced-filter, .filter-wrapper {
+//        display: none;
+//    }
+//}
 
 body:not(.review) {
     footer {
