@@ -32,7 +32,7 @@ class Microsoft extends BaseFeature {
             Features::PROJECT_COMPLETION,
             Features::TRANSLATION_VERSIONS,
             Features::QACHECK_GLOSSARY,
-            // Features::REVIEW_EXTENDED  // Enabled by default as mandatory plugin
+            Features::REVIEW_EXTENDED  // Enabled by default as mandatory plugin
     ];
 
     public static function loadRoutes( Klein $klein ) {
