@@ -101,7 +101,7 @@ class Microsoft extends BaseFeature {
                     }
                 }
                 $error = implode( $mh->getError( $hash ) );
-                \Log::doLog( "error OnePolicheck: " . $info_project . " error: " . $error );
+                \Log::doJsonLog( "error OnePolicheck: " . $info_project . " error: " . $error );
                 $this->getLogger()->error( "error OnePolicheck: " . $info_project . " error: " . $error );
                 \Utils::sendErrMailReport( "error OnePolicheck: " . $info_project . " error: " . $error );
             }
