@@ -55,40 +55,40 @@
         return false;
     });
 
-    function overrideSegmentsFilter( SegmentsFilter ) {
-        let originalComponentDidMount =  SegmentsFilter.prototype.componentDidMount;
-        let originaldefaultState =  SegmentsFilter.prototype.defaultState;
-        SegmentsFilter.prototype.componentDidMount = function (  ) {
-
-            let storedState = SegmentFilter.getStoredState();
-            if (config.isReview && !storedState.reactState) {
-                originalComponentDidMount.apply(this);
-                this.doSubmitFilter();
-            } else {
-                originalComponentDidMount.apply(this);
-            }
-        };
-
-        SegmentsFilter.prototype.defaultState = function (  ) {
-            let storedState = SegmentFilter.getStoredState();
-            if (config.isReview && !storedState.reactState) {
-                return {
-                    selectedStatus: '',
-                    samplingType: filter_type,
-                    samplingSize: filte_size,
-                    filtering: false,
-                    filteredCount: 0,
-                    segmentsArray: [],
-                    moreFilters: this.moreFilters,
-                    filtersEnabled: true,
-                    dataSampleEnabled: true,
-
-                }
-            } else {
-                return originaldefaultState.apply(this);
-            }
-        }
-    }
+    // function overrideSegmentsFilter( SegmentsFilter ) {
+    //     let originalComponentDidMount =  SegmentsFilter.prototype.componentDidMount;
+    //     let originaldefaultState =  SegmentsFilter.prototype.defaultState;
+    //     SegmentsFilter.prototype.componentDidMount = function (  ) {
+    //
+    //         let storedState = SegmentFilter.getStoredState();
+    //         if (config.isReview && !storedState.reactState) {
+    //             originalComponentDidMount.apply(this);
+    //             this.doSubmitFilter();
+    //         } else {
+    //             originalComponentDidMount.apply(this);
+    //         }
+    //     };
+    //
+    //     SegmentsFilter.prototype.defaultState = function (  ) {
+    //         let storedState = SegmentFilter.getStoredState();
+    //         if (config.isReview && !storedState.reactState) {
+    //             return {
+    //                 selectedStatus: '',
+    //                 samplingType: filter_type,
+    //                 samplingSize: filte_size,
+    //                 filtering: false,
+    //                 filteredCount: 0,
+    //                 segmentsArray: [],
+    //                 moreFilters: this.moreFilters,
+    //                 filtersEnabled: true,
+    //                 dataSampleEnabled: true,
+    //
+    //             }
+    //         } else {
+    //             return originaldefaultState.apply(this);
+    //         }
+    //     }
+    // }
 
     function overrideSegmentsMatches( SegmentTabMatches ) {
 
@@ -109,7 +109,7 @@
 
         };
     }
-    overrideSegmentsFilter(SegmentFilter);
+    // overrideSegmentsFilter(SegmentFilter);
     overrideSegmentsMatches(SegmentTabMatches);
 
     SegmentTabMessages.prototype.excludeMatchingNotesRegExp = new RegExp(/(adjWordcount|curWordcount)/m);
