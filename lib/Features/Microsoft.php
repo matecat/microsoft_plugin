@@ -402,7 +402,7 @@ class Microsoft extends BaseFeature {
                 /**
                  * Standard word count is needed
                  *
-                 * @see getProjectSegmentsTranslationSummary
+                 * @see ProjectWordCount::getProjectSegmentsTranslationSummary
                  */
                 $structArray[ 'match_type' ]          = 'MT';
                 $structArray[ 'eq_word_count' ]       = $wordCount * $payableRates[ 'MT' ] / 100;
