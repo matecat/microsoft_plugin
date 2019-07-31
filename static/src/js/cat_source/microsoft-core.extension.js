@@ -40,9 +40,9 @@
 
     });
 
-    $.extend(QA_GLOSSARY, {
+    $.extend(QaCheckGlossary, {
 
-        qaCheckRegExpFlags: 'gi'
+        regExpFlags: 'gi'
 
     });
 
