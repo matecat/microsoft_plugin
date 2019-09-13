@@ -9,6 +9,7 @@
 namespace Features\Microsoft\View\API\JSON;
 
 
+use Chunks_ChunkStruct;
 use \Features\ReviewExtended\View\API\JSON\ProjectUrlsDecorator;
 use LQA\ChunkReviewDao;
 
@@ -17,9 +18,9 @@ class MicrosoftUrlsDecorator extends ProjectUrlsDecorator {
 
     public function reviseUrl( $record ) {
 
-        $reviewChunk = ChunkReviewDao::findOneChunkReviewByIdJobAndPassword(
-                $record[ 'jid' ], $record[ 'jpassword' ]
-        );
+        $reviewChunk = ( new ChunkReviewDao() )->findChunkReviews(
+                new Chunks_ChunkStruct( [ 'id' => $record[ 'jid' ], 'password' => $record[ 'jpassword' ] ] )
+        )[ 0 ];
 
         return \Routes::revise(
                 $record[ 'name' ],
