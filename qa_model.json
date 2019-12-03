@@ -7,6 +7,7 @@
       {
         "label": "Accuracy",
         "severities" : false,
+        "code": "ACC",
         "subcategories" : [
           { "label": "Addition" },
           { "label": "Omission" },
@@ -20,6 +21,7 @@
       {
         "label": "Fluency",
         "severities" : false,
+        "code": "FLU",
         "subcategories" : [
           { "label": "Punctuation" },
           { "label": "Spelling" },
@@ -33,6 +35,7 @@
       {
         "label": "Terminology",
         "severities" : false,
+        "code": "TRM",
         "subcategories" : [
           { "label": "Inconsistent with termbase" },
           { "label": "Inconsistent use of terminology" }
@@ -41,6 +44,7 @@
       {
         "label": "Style",
         "severities" : false,
+        "code": "STY",
         "subcategories" : [
           { "label": "Awkward" },
           { "label": "Company Style" },
@@ -52,6 +56,7 @@
       {
         "label": "Design",
         "severities" : false,
+        "code": "DSG",
         "subcategories" : [
           { "label": "Length" },
           { "label": "Local formatting" },
@@ -63,6 +68,7 @@
       {
         "label" : "Local convention",
         "severities" : false,
+        "code": "LCV",
         "subcategories" : [
           { "label": "Address format" },
           { "label": "Date format" },
@@ -75,12 +81,14 @@
       {
         "label" : "Verity",
         "severities" : false,
+        "code" : "VRT"
         "subcategories" : [
           { "label": "Culture-specific reference" }
         ]
       },
       {
-        "label" : "Other"
+        "label" : "Other",
+        "code": "OTH"
       }
     ],
       "severities": [
