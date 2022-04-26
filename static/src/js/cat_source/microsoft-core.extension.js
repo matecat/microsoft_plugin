@@ -5,7 +5,7 @@
 
   $.extend(UI, {
     showFixWarningsModal: function () {
-      ModalWindow.showModalComponent(ConfirmMessageModal, {
+      ModalsActions.showModalComponent(ConfirmMessageModal, {
         successText: 'Fix errors',
         cancelText: 'Mark as complete',
         successCallback: () => UI.goToFirstError(),
@@ -14,7 +14,7 @@
       })
     },
     showFixWarningsOnDownload(continueDownloadFunction) {
-      ModalWindow.showModalComponent(ConfirmMessageModal, {
+      ModalsActions.showModalComponent(ConfirmMessageModal, {
         successText: 'Download anyway',
         cancelText: 'Fix errors',
         successCallback: () => continueDownloadFunction(),
